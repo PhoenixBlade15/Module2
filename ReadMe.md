@@ -16,10 +16,12 @@ The second test for "Hunt Showdown" was done in 1920x1080 all the other settings
 The second test for "Hell Let Loose" is done all ultra settings, this game is intensive to run as shown by FPS but with a GPU upgrade again would improve greatly.
 
 Graphs
-[Graph of First Hell Let Loose Log](HellLetLoose/NormalLog.png)
+![Graph of First Hell Let Loose Log](HellLetLoose/NormalLog.png)
 
-[Graph of Second Hell Let Loose Log](HellLetLoose/UltraLog.png)
+![Graph of Second Hell Let Loose Log](HellLetLoose/UltraLog.png)
 
-[Graph of First Hunt Showdown Log](HuntShowdown/NormalLog.png)
+![Graph of First Hunt Showdown Log](HuntShowdown/NormalLog.png)
 
-[Graph of Second Hunt Showdown Log](HuntShowdown/LowerResLog.png)
+![Graph of Second Hunt Showdown Log](HuntShowdown/LowerResLog.png)
+
+Unsure why all graphs are straight lines
