@@ -24,5 +24,3 @@ Graphs
 ![Graph of First Hunt Showdown Log](HuntShowdown/NormalLog.png)
 
 ![Graph of Second Hunt Showdown Log](HuntShowdown/LowerResLog.png)
-
-Unsure why all graphs are straight lines
