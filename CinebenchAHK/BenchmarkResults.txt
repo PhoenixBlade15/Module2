@@ -1,0 +1,5 @@
+Processor is: AMD Ryzen 7 3700X 8-Core Processor
+Number of Cores: 8
+Multi Core Score: 10400 pts 
+Single Core Score: 1244 pts 
+Estimated Single Core Score: 1300
