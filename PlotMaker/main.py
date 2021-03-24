@@ -1,7 +1,14 @@
 import os
 from os import path
-import matplotlib.pyplot as plt
-import urllib.request
+try:
+    import urllib.request
+except ImportError:
+    print("UrlLib not installed. Try doing: pip install urllib3")
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    print("MatPlotLib not installed. Try doing: python -m pip install -U pip or python -m pip install -U matplotlib")
+    quit(-1)
 # Get the raw urls needed - TO DO
 
 
@@ -71,97 +78,101 @@ def plotGraph(workingList, currentGameName, currentHardware):
     plt.close()
 
 
-urlList = ["https://raw.githubusercontent.com/wendelltron/csc496demo/master/5950x/Reference%206700XT/Benchmark.txt",
-           "https://raw.githubusercontent.com/wendelltron/csc496demo/master/5950x/Sapphire%206700XT/Benchmark.txt"]
-benchmarksTextConjoined = []
+try:
+    urlList = ["https://raw.githubusercontent.com/wendelltron/csc496demo/master/5950x/Reference%206700XT/Benchmark.txt",
+               "https://raw.githubusercontent.com/wendelltron/csc496demo/master/5950x/Sapphire%206700XT/Benchmark.txt"]
+    benchmarksTextConjoined = []
 
-# Downloads all the text files from urls gathered in the previous step
-for url in urlList:
-    # Cuts the first part off to give us the cpu and then gpu and file name
-    textFileName = url[64:]
-    textFileName = textFileName.replace('/', '').replace('%20', '')
-    # Checks if the file exists and if so delete it
-    if path.exists(textFileName):
-        os.remove(textFileName)
-        # print(textFileName + " removed.")
-        # Save the text file in the url as the name and add it to a list
-    urllib.request.urlretrieve(url, textFileName)
-    benchmarksTextConjoined.append(textFileName)
+    # Downloads all the text files from urls gathered in the previous step
+    for url in urlList:
+        # Cuts the first part off to give us the cpu and then gpu and file name
+        textFileName = url[64:]
+        textFileName = textFileName.replace('/', '').replace('%20', '')
+        # Checks if the file exists and if so delete it
+        if path.exists(textFileName):
+            os.remove(textFileName)
+            # print(textFileName + " removed.")
+            # Save the text file in the url as the name and add it to a list
+        urllib.request.urlretrieve(url, textFileName)
+        benchmarksTextConjoined.append(textFileName)
 
-currentGameName = ""
-gameNames = []
-benchmarkInfo = ""
+    currentGameName = ""
+    gameNames = []
+    benchmarkInfo = ""
 
-# Separate the conjoined benchmarks
-for benchmarks in benchmarksTextConjoined:
-    file = open(benchmarks, "r")
-    for line in file:
-        # Makes sure the line is not empty
-        if line != "\n":
-            if line[0] != " ":
+    # Separate the conjoined benchmarks
+    for benchmarks in benchmarksTextConjoined:
+        file = open(benchmarks, "r")
+        for line in file:
+            # Makes sure the line is not empty
+            if line != "\n":
+                if line[0] != " ":
 
-                # Isolate the game name from the string
-                gameName = line[line.index(' ')+1:]
-                gameName = gameName[gameName.index(' ')+1:]
-                gameName = gameName[:gameName.index(' ')-4]
+                    # Isolate the game name from the string
+                    gameName = line[line.index(' ')+1:]
+                    gameName = gameName[gameName.index(' ')+1:]
+                    gameName = gameName[:gameName.index(' ')-4]
 
-                # Gets the resolution out of the line name
-                resolution = line
-                for i in range(0, 11):
-                    resolution = resolution[resolution.index(' ')+1:]
-                resolution = resolution.replace(' ', '')
+                    # Gets the resolution out of the line name
+                    resolution = line
+                    for i in range(0, 11):
+                        resolution = resolution[resolution.index(' ')+1:]
+                    resolution = resolution.replace(' ', '')
 
-                # Adds the items together to have an identifier
-                fullName = benchmarks[:-4] + " " + gameName + " " + resolution.replace("\n", "") + ".txt"
+                    # Adds the items together to have an identifier
+                    fullName = benchmarks[:-4] + " " + gameName + " " + resolution.replace("\n", "") + ".txt"
 
-                # Checks if first game or not
-                if currentGameName == "":
-                    currentGameName = fullName
+                    # Checks if first game or not
+                    if currentGameName == "":
+                        currentGameName = fullName
 
-                # Checks if the game name has switched
-                if currentGameName != fullName:
-                    gameNames.append(currentGameName)
-                    saveBenchmark(currentGameName, benchmarkInfo)
-                    benchmarkInfo = ""
-                    currentGameName = fullName
-                # Reads the next 5 lines to grab the info for that file
-                for x in range(0, 5):
-                    benchmarkInfo = benchmarkInfo + file.readline().strip() + "\n"
-    file.close()
-    saveBenchmark(currentGameName, benchmarkInfo)
+                    # Checks if the game name has switched
+                    if currentGameName != fullName:
+                        gameNames.append(currentGameName)
+                        saveBenchmark(currentGameName, benchmarkInfo)
+                        benchmarkInfo = ""
+                        currentGameName = fullName
+                    # Reads the next 5 lines to grab the info for that file
+                    for x in range(0, 5):
+                        benchmarkInfo = benchmarkInfo + file.readline().strip() + "\n"
+        file.close()
+        saveBenchmark(currentGameName, benchmarkInfo)
 
-currentGameName = ""
-currentHardware = ""
-workingList = []
+    currentGameName = ""
+    currentHardware = ""
+    workingList = []
 
-# Check benchmark and game name is same
-for gameFile in gameNames:
+    # Check benchmark and game name is same
+    for gameFile in gameNames:
 
-    # Grabs the information needed to identify what benchmark we are on
-    hardware = gameFile[:gameFile.index(" ")]
-    gameName = gameFile[gameFile.index(" ")+1:]
-    gameName = gameName[:gameName.index(" ")]
+        # Grabs the information needed to identify what benchmark we are on
+        hardware = gameFile[:gameFile.index(" ")]
+        gameName = gameFile[gameFile.index(" ")+1:]
+        gameName = gameName[:gameName.index(" ")]
 
-    # Checks if the first iteration or a different benchmark and adjusts
-    if currentHardware == "":
-        currentHardware = hardware
-    if currentGameName == "":
-        currentGameName = gameName
-    if currentGameName == gameName and currentHardware == hardware:
-        workingList.append(gameFile)
-    else:
-        plotGraph(workingList, currentGameName, currentHardware)
+        # Checks if the first iteration or a different benchmark and adjusts
+        if currentHardware == "":
+            currentHardware = hardware
+        if currentGameName == "":
+            currentGameName = gameName
+        if currentGameName == gameName and currentHardware == hardware:
+            workingList.append(gameFile)
+        else:
+            plotGraph(workingList, currentGameName, currentHardware)
 
-        # Sets up the next benchmark
-        workingList = [gameFile]
-        currentHardware = hardware
-        currentGameName = gameName
-plotGraph(workingList, currentGameName, currentHardware)
+            # Sets up the next benchmark
+            workingList = [gameFile]
+            currentHardware = hardware
+            currentGameName = gameName
+    plotGraph(workingList, currentGameName, currentHardware)
 
-# Removes all the unneeded text files
-for gameFile in gameNames:
-    gameName = gameFile[gameFile.index(" ")+1:]
-    gameName = gameName[:gameName.index(" ")]
-    fileDir = gameName + "/" + gameFile
-    if path.exists(fileDir):
-        os.remove(fileDir)
+    # Removes all the unneeded text files
+    for gameFile in gameNames:
+        gameName = gameFile[gameFile.index(" ")+1:]
+        gameName = gameName[:gameName.index(" ")]
+        fileDir = gameName + "/" + gameFile
+        if path.exists(fileDir):
+            os.remove(fileDir)
+except:
+    print("Error")
+    input("Press enter to continue: ")
